@@ -3,9 +3,12 @@ from .models import Contact
 
 class ContactForm(forms.ModelForm):
     message = forms.CharField(
-        widget=forms.Textarea()
+        max_length=2000,
+        widget=forms.Textarea(),
+        help_text='Write here your message!'
     )
     source = forms.CharField(
+        max_length=50,
         widget=forms.HiddenInput()
     )
 
