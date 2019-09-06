@@ -10,25 +10,54 @@
     <form action="" method="post">
         {% csrf_token %}
         
-        {{form.non_field_errors}}
-
+        <!-- Non field erros -->
+        {% if form.non_field_errors %}
+            <ul>
+                {% for error in form.non_field_errors %}
+                    <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <!-- Hidden fields -->
         {% for hidden_field in form.hidden_fields %}
-            {{hidden_field.errors}}
+            {% if hidden_field.errors %}
+                <ul>
+                    {% for error in hidden_field.errors %}
+                        <li>(Hidden field {{hidden_field.name}}) {{error}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
             {{hidden_field}}
         {% endfor %}
+
         <table border="1">
+            <!-- Render field -->
             {% for field in form.visible_fields %}
                 <tr>
                     <th>{{field.label_tag}}</th>
                     <td>
-                        {{field.errors}}
+                        <!-- if field erros exist -->
+                        {% if field.errors %}
+                            <ul>
+                                {% for error in field.errors %}
+                                    <li>{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <!-- field -->
                         {{field}}
-                        {{field.help_text}}
+
+                        <!-- help text -->
+                        {% if field.help_text %}
+                            <br />{{field.help_text}}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
         </table>
-        
+
         <button type="submit">Submit</button>
     </form>
 </body>
